@@ -1,49 +1,49 @@
+require("dotenv").config();
 const router = require("express").Router();
 const passport = require("passport");
 const { OAuth2Client } = require("google-auth-library");
 const Player = require("../models/PlayerModel");
 const Game = require("../models/GamesModel");
 
-const googleClient = new OAuth2Client({
-  clientId:
-    "15426169653-rhbrmn7aosco5fn7julv7019ilu67m9e.apps.googleusercontent.com",
-});
+router.post("/googleAuth", async (req, res) => {
+  const { platform, token } = req.body;
 
-//auth login
-router.post("/login", async (req, res) => {
-  const { provider, token } = req.body;
-  if (provider === "google") {
-    const ticket = await googleClient.verifyIdToken({
-      idToken: token,
-      audience:
-        "15426169653-rhbrmn7aosco5fn7julv7019ilu67m9e.apps.googleusercontent.com",
+  const ID = platform === "android" ? process.env.ANDROID_GOOGLE_ID : process.env.IOS_GOOGLE_ID;
+
+  googleClient = new OAuth2Client({
+    clientId: ID,
+  });
+
+  const ticket = await googleClient.verifyIdToken({
+    idToken: token,
+    audience: ID,
+  });
+  
+  const userData = ticket.getPayload();
+  if (userData) {
+    // good token
+    Player.findOne({ email: userData.email }).then((currentUser) => {
+      // check our database to see if user exists
+      if (currentUser) {
+        res.status(200).json(currentUser);
+      } else {
+        // if user does not exist then create user with payload information and return user
+        const player = new Player({
+          email: userData.email,
+          picture: userData.picture,
+          role: "player",
+          setup: false,
+        });
+
+        player.save().then((user) => {
+          res.status(201).json(user);
+        });
+      }
     });
-    const userData = ticket.getPayload();
-    if (userData) {
-      // good token
-      Player.findOne({ email: userData.email }).then((currentUser) => {
-        // check our database to see if user exists
-        if (currentUser) {
-          res.status(200).json(currentUser);
-        } else {
-          // if user does not exist then create user with payload information and return user
-          const player = new Player({
-            email: userData.email,
-            picture: userData.picture,
-            role: "player",
-            setup: false,
-          });
-
-          player.save().then((user) => {
-            res.status(201).json(user);
-          });
-        }
-      });
-    } else {
-      res.status(500).json({
-        error: "token is not valid",
-      });
-    }
+  } else {
+    res.status(500).json({
+      error: "token is not valid",
+    });
   }
 });
 
