@@ -10,13 +10,15 @@ router.post("/googleAuth", async (req, res) => {
 
   const ID = platform === "android" ? process.env.ANDROID_GOOGLE_ID : process.env.IOS_GOOGLE_ID;
 
+  console.log(platform)
+
   googleClient = new OAuth2Client({
     clientId: ID,
   });
 
   const ticket = await googleClient.verifyIdToken({
     idToken: token,
-    audience: ID,
+    audience: process.env.ANDROID_GOOGLE_ID,
   });
   
   const userData = ticket.getPayload();
