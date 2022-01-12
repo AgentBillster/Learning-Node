@@ -6,5 +6,8 @@ const { uploadFile } = require("../s3");
 router.post("/images", upload.single("image"), async (req, res) => {
   const file = req.file;
   const result = await uploadFile(file);
-  res.send("nice");
+  res.send(result);
 });
+
+
+module.exports = router;

@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const app = express();
 const cookieSession = require("cookie-session");
 const authRoutes = require("./routes/authRoutes");
+const utilRoutes = require("./routes/utilRoutes");
+const playerRoutes = require("./routes/playerRoutes");
 
 var cors = require("cors");
 
@@ -26,6 +28,7 @@ app.use(
 );
 
 app.use("/auth", authRoutes);
-app.use("/util", authRoutes);
+app.use("/util", utilRoutes);
+app.use("/player", playerRoutes);
 
 module.exports = app;

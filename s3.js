@@ -7,7 +7,7 @@ const region = process.env.AWS_BUCKET_REGION;
 const key = process.env.AWS_ACCESS_KEY;
 const secret = process.env.AWS_SECRET_KEY;
 
-const s3 = new s3({
+const u = new s3({
   region,
   key,
   secret,
@@ -20,6 +20,6 @@ const uploadFile = (file) => {
     Body: fileStream,
     key: file.filename,
   };
-  return s3.upload(uploadParams).promise();
+  return u.upload(uploadParams).promise();
 };
 exports.uploadFile = uploadFile;

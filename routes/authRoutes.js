@@ -8,9 +8,12 @@ const Game = require("../models/GamesModel");
 router.post("/googleAuth", async (req, res) => {
   const { platform, token } = req.body;
 
-  const ID = platform === "android" ? process.env.ANDROID_GOOGLE_ID : process.env.IOS_GOOGLE_ID;
+  const ID =
+    platform === "android"
+      ? process.env.ANDROID_GOOGLE_ID
+      : process.env.IOS_GOOGLE_ID;
 
-  console.log(platform)
+  console.log(platform);
 
   googleClient = new OAuth2Client({
     clientId: ID,
@@ -20,10 +23,10 @@ router.post("/googleAuth", async (req, res) => {
     idToken: token,
     audience: process.env.ANDROID_GOOGLE_ID,
   });
-  
+
   const userData = ticket.getPayload();
   if (userData) {
-    // good token
+    // good GMAIL token
     Player.findOne({ email: userData.email }).then((currentUser) => {
       // check our database to see if user exists
       if (currentUser) {
@@ -32,7 +35,7 @@ router.post("/googleAuth", async (req, res) => {
         // if user does not exist then create user with payload information and return user
         const player = new Player({
           email: userData.email,
-          picture: userData.picture,
+          avatar: null,
           role: "player",
           setup: false,
         });
