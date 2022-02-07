@@ -2,6 +2,9 @@ const router = require("express").Router();
 const passport = require("passport");
 const Player = require("../models/PlayerModel");
 const Game = require("../models/GamesModel");
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
+const { uploadFile } = require("../s3");
 
 router.post("/isNameAvailable", async (req, res) => {
   const { username } = req.body;
@@ -16,27 +19,32 @@ router.post("/isNameAvailable", async (req, res) => {
   });
 });
 
-router.post("/finishSetup", async (req, res) => {
+router.post("/finishSetup", upload.single("image"), async (req, res) => {
   const { id, name, data, setupInfo } = req.body;
+  const file = setupInfo.playerImage;
+  // const result = await uploadFile(file);
 
-  // find player by id
-  Player.findOne({ _id: id })
-    .then((player) => {
-      player.age = setupInfo.age;
-      player.avatar = setupInfo.avatar;
-      player.games[name] = data;
-      player.setup = true;
-      player.markModified("games");
+  console.log(file)
 
-      console.log(player);
+  // Player.findOne({ _id: id })
+  //   .then((player) => {
+  //     player.age = setupInfo.age;
+  //     player.avatar = setupInfo.avatar;
+  //     player.games[name] = data;
+  //     player.setup = true;
+  //     player.markModified("games");
 
-      player.save().then((player) => {
-        res.status(201).json("success");
-      });
-    })
-    .catch((err) => {
-      res.status(404).json(err);
-    });
+  //     console.log(player);
+
+  //     player.save().then((player) => {
+  //       res.status(201).json("success");
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     res.status(404).json(err);
+  //   });
+
+
 });
 
 router.get("/getplayer", async (req, res) => {

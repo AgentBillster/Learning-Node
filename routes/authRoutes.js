@@ -7,6 +7,7 @@ const Game = require("../models/GamesModel");
 
 router.post("/googleAuth", async (req, res) => {
   const { platform, token } = req.body;
+  console.log(platform)
 
   const ID =
     platform === "android"
