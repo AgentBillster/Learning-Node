@@ -14,8 +14,6 @@ router.post("/googleAuth", async (req, res) => {
       ? process.env.ANDROID_GOOGLE_ID
       : process.env.IOS_GOOGLE_ID;
 
-  console.log(platform);
-
   googleClient = new OAuth2Client({
     clientId: ID,
   });

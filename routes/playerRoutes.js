@@ -1,50 +1,69 @@
+const multer = require("multer");
+const upload = multer({ dest: "uploads/" });
 const router = require("express").Router();
 const passport = require("passport");
 const Player = require("../models/PlayerModel");
 const Game = require("../models/GamesModel");
-const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
 const { uploadFile } = require("../s3");
+require("dotenv").config();
+const s3 = require("aws-sdk/clients/s3");
 
-router.post("/isNameAvailable", async (req, res) => {
-  const { username } = req.body;
-
-  // find player by id
-  Player.findOne({ username: username }).then((player) => {
-    if (player) {
-      res.send(false);
-    } else {
-      res.send(true);
-    }
-  });
+const s3bucket = new s3({
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_KEY
+  },
+  region: "us-east-2",
 });
 
-router.post("/finishSetup", upload.single("image"), async (req, res) => {
-  const { id, name, data, setupInfo } = req.body;
-  const file = setupInfo.playerImage;
-  // const result = await uploadFile(file);
+router.post("/createUser", async (req, res) => {
+  const { id, setupInfo } = req.body;
+  const base64Data = Buffer.from(setupInfo.playerImage.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+  let imageUrl = ""
+  await s3bucket.upload(
+    {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: id, // the key for S3 location 
+      Body: base64Data, // bytearray
+      ContentEncoding: 'base64', // important to tell that the incoming buffer is base64
+      ContentType: "image/jpeg", // e.g. "image/jpeg" or "image/png"
+    },
+  ).promise().then(res => {
+    // using promise gives me the lcoation of the url ??
+    imageUrl = res.Location
+  })
 
-  console.log(file)
+  Player.findOne({ _id: id })
+    .then((player) => {
+      player.age = setupInfo.age;
+      player.avatar = imageUrl;
 
-  // Player.findOne({ _id: id })
-  //   .then((player) => {
-  //     player.age = setupInfo.age;
-  //     player.avatar = setupInfo.avatar;
-  //     player.games[name] = data;
-  //     player.setup = true;
-  //     player.markModified("games");
-
-  //     console.log(player);
-
-  //     player.save().then((player) => {
-  //       res.status(201).json("success");
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     res.status(404).json(err);
-  //   });
+      player.save().then((player) => {
+        res.status(201).json({ "resouce": player });
+      });
+    })
+    .catch((err) => {
+      res.status(404).json(err);
+    });
 
 
+});
+
+
+router.post("/link", async (req, res) => {
+  const { gameData, id } = req.body;
+
+  Player.findOne({ _id: id }).then((player) => {
+    player.games.push(gameData);
+    player.setup = true;
+    player.markModified("games");
+    console.log(player)
+    player.save().then((player) => {
+      res.status(201).json({ "resouce": player });
+    });
+  })
+
+  // change setup === true
 });
 
 router.get("/getplayer", async (req, res) => {
@@ -52,6 +71,10 @@ router.get("/getplayer", async (req, res) => {
 
   // find player by id
   Player.findOne({ email: email }).then((player) => {
+
+
+
+
     res.status(201).json({
       player: player,
     });
