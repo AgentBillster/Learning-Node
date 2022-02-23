@@ -5,6 +5,8 @@ const cookieSession = require("cookie-session");
 const authRoutes = require("./routes/authRoutes");
 const utilRoutes = require("./routes/utilRoutes");
 const playerRoutes = require("./routes/playerRoutes");
+const clanRoutes = require("./routes/clanRoutes");
+
 
 var cors = require("cors");
 
@@ -30,5 +32,7 @@ app.use(
 app.use("/auth", authRoutes);
 app.use("/util", utilRoutes);
 app.use("/player", playerRoutes);
+app.use("/clan", clanRoutes);
+
 
 module.exports = app;

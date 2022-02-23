@@ -5,6 +5,7 @@ const passport = require("passport");
 const Player = require("../models/PlayerModel");
 const Game = require("../models/GamesModel");
 const { uploadFile } = require("../s3");
+const geolib = require('geolib');
 require("dotenv").config();
 const s3 = require("aws-sdk/clients/s3");
 
@@ -71,10 +72,6 @@ router.get("/getplayer", async (req, res) => {
 
   // find player by id
   Player.findOne({ email: email }).then((player) => {
-
-
-
-
     res.status(201).json({
       player: player,
     });
@@ -82,5 +79,17 @@ router.get("/getplayer", async (req, res) => {
 
   // change setup === true
 });
+
+
+
+
+
+
+
+
+// }
+
+
+
 
 module.exports = router;

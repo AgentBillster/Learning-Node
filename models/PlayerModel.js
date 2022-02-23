@@ -10,7 +10,7 @@ const PlayerModel = mongoose.Schema(
     role: { type: String, required: true },
     setup: { type: Boolean, required: true },
     games: { type: Array, default: [] },
-    captain: { type: Object, default: {} },
+    clan: { type: mongoose.Schema.Types.ObjectId, ref: 'Clan' }
   },
   { minimize: false },
   { versionKey: false }
@@ -20,3 +20,7 @@ PlayerModel.plugin(uniqueValidator, {
   message: "looks like {PATH} already exists",
 });
 module.exports = mongoose.model("Player", PlayerModel);
+
+
+
+
