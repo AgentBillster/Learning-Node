@@ -1,8 +1,7 @@
-# Backend for Nexus
-## Dependencies
+### Backend for Nexus
+
 - deps
-
-
+- 
 
 ## Endpoints
 - [/api/auth](#/api/auth)
