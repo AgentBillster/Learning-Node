@@ -1,22 +1,7 @@
-## Backend for Nexus
-# Dependencies
-- dependencies:
-    axios: ^0.19.0,
-    bcryptjs: ^2.4.3,
-    cors: ^2.8.5,
-    express: ^4.17.1,
-    helmet: ^3.20.0,
-    jsonwebtoken: ^8.5.1,
-    knex: ^0.19.2,
-    knex-cleaner: ^1.3.0,
-    pg: ^7.12.1,
-    sqlite3: ^4.1.0
+# Backend for Nexus
+## Dependencies
+- deps
 
-- devDependencies
-    cross-env: ^5.2.0,
-    jest: ^24.9.0,
-    nodemon: ^1.19.1,
-    supertest: ^4.0.2
 
 
 ## Endpoints
