@@ -1,7 +1,22 @@
 # Backend for Nexus App
+deps:
+{
+  "aws-sdk": "^2.1015.0",
+  "cookie-session": "^1.4.0",
+  "cors": "^2.8.5",
+  "dotenv": "^10.0.0",
+  "ejs": "^3.1.6",
+  "express": "^4.17.1",
+  "geolib": "^3.3.3",
+  "google-auth-library": "^7.10.0",
+  "mongoose": "^6.0.4",
+  "mongoose-unique-validator": "^3.1.0",
+  "multer": "^1.4.3",
+  "nodemon": "^2.0.20",
+  "passport": "^0.4.1",
+  "passport-google-oauth20": "^2.0.0"
+}
 
-Deps:
--
 
 
 
