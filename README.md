@@ -1,19 +1,19 @@
 # Backend for Nexus App
-Deps:
-  aws-sdk
-  cookie-session
-  cors
-  dotenv"
-  ejs
-  express
-  geolib
-  google-auth-library
-  mongoose
-  mongoose-unique-validator
-  multer
-  nodemon
-  passport
-  passport-google-oauth20
+deps:
+ - aws-sdk
+ - cookie-session
+ - cors
+ - dotenv"
+ - ejs
+ - express
+ - geolib
+ - google-auth-library
+ - mongoose
+ - mongoose-unique-validator
+ - multer
+ - nodemon
+ - passport
+ - passport-google-oauth20
 
 ## Endpoints
 - [/api/auth](#/api/auth)
