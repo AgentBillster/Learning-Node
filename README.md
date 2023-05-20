@@ -7,13 +7,11 @@
  - dotenv"
  - ejs
  - express
- - geolib
+ - geolocation API
  - google-auth-library
  - mongoose
- - mongoose-unique-validator
  - multer
  - nodemon
- - passport
  - passport-google-oauth20
 
 ## Endpoints
